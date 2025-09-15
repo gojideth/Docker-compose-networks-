@@ -1,0 +1,27 @@
+services:
+  neo4j:
+    image: neo4j:5.16
+    ports:
+      - "7687:7687"
+      - "7474:7474"
+    environment:
+      NEO4J_AUTH: neo4j/password
+    networks:
+      - app-network
+
+  fastapi:
+    build: ./api
+    ports:
+      - "8000:8000"
+    environment:
+      NEO4J_URI: bolt://neo4j:7687  # Usamos el nombre del servicio (Línea 3)
+      NEO4J_USER: neo4j
+      NEO4J_PASSWORD: password
+    networks:
+      - app-network
+    depends_on:
+      - neo4j
+
+networks:
+  app-network:
+    driver: bridge
