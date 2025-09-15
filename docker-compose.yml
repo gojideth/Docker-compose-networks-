@@ -1,0 +1,29 @@
+services:
+  api:
+    build: ./api
+    ports:
+      - "5000:5000"
+    environment:
+      NEO4J_URI: bolt://172.17.0.3:7687  # Hard-coded IP that might not match
+      NEO4J_USER: neo4j
+      NEO4J_PASSWORD: password
+    network_mode: bridge  # Force default bridge network
+
+  neo4j:
+    image: neo4j:5.16
+    ports:
+      - "7687:7687"
+      - "7474:7474"
+    environment:
+      NEO4J_AUTH: neo4j/password
+    network_mode: bridge  # Force default bridge network
+
+  fastapi:
+    build: ./api
+    ports:
+      - "8000:8000"
+    environment:
+      NEO4J_URI: bolt://neo4j:7687  # Updated to use service name
+      NEO4J_USER: neo4j
+      NEO4J_PASSWORD: password
+    network_mode: bridge  # Force default bridge network

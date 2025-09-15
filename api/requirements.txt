@@ -1,0 +1,3 @@
+fastapi
+neo4j
+uvicorn
